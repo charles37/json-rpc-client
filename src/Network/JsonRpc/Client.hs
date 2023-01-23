@@ -48,10 +48,10 @@ module Network.JsonRpc.Client ( -- * Summary
 import Network.JsonRpc.Server (RpcResult, RpcError (..), rpcError)
 import qualified Data.Aeson as A
 import qualified Data.Aeson.KeyMap as KM
+import qualified Data.Aeson.Key    as DAK 
 import Data.Aeson ((.=), (.:))
 import Data.Text (Text (), pack)
 import Data.ByteString.Lazy (ByteString)
-import qualified Data.HashMap.Strict as H
 import Data.Ord (comparing)
 import Data.Maybe (catMaybes)
 import qualified Data.Vector as V
@@ -242,7 +242,7 @@ instance A.FromJSON r => ClientFunction () r (Batch r) where
                                                "Client received wrong result type: " ++ msg
 
 instance (ClientFunction ps r f, A.ToJSON a) => ClientFunction (a ::: ps) r (a -> f) where
-    _toBatch name (p ::: ps) rt priorArgs a = let newArgs = KM.insert p (A.toJSON a) priorArgs
+    _toBatch name (p ::: ps) rt priorArgs a = let newArgs = KM.insert (DAK.fromText p) (A.toJSON a) priorArgs
                                               in _toBatch name ps rt newArgs
 
 -- | Relationship between a function ('g') taking any number of arguments and yielding a @'Batch' a@,
