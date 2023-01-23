@@ -8,6 +8,7 @@ import System.Environment (getArgs)
 import qualified Data.ByteString.Lazy.Char8 as B
 import Data.Traversable (sequenceA)
 import Control.Applicative ((<$>), (<*>))
+import Control.Monad (replicateM)
 import Control.Monad.Except (runExceptT, liftIO)
 import Control.Monad.Reader (ReaderT, runReaderT, ask)
 
@@ -23,7 +24,7 @@ runRpcs = do
   printResult =<< run ((,) <$> incrementB <*> concatenateB "abc" "xyz")
 
   -- Create a batch with three requests:
-  let inc3 = sequenceA $ replicate 3 incrementB
+  let inc3 = replicateM 3 incrementB
 
   -- Run the batch (prints [4,5,6]):
   printResult =<< run inc3

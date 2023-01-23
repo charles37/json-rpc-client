@@ -47,6 +47,7 @@ module Network.JsonRpc.Client ( -- * Summary
 
 import Network.JsonRpc.Server (RpcResult, RpcError (..), rpcError)
 import qualified Data.Aeson as A
+import qualified Data.Aeson.KeyMap as KM
 import Data.Aeson ((.=), (.:))
 import Data.Text (Text (), pack)
 import Data.ByteString.Lazy (ByteString)
@@ -109,7 +110,7 @@ infixr :::
 toBatchFunction :: ClientFunction ps r f =>
                    Signature ps r -- ^ Method signature.
                 -> f              -- ^ Client-side function with a return type of @'Batch' r@.
-toBatchFunction s@(Signature name params) = _toBatch name params (resultType s) H.empty
+toBatchFunction s@(Signature name params) = _toBatch name params (resultType s) KM.empty
 
 -- | Creates a function for calling a JSON-RPC method as a notification and as part of a batch request.
 toBatchFunction_ :: (ClientFunction ps r f, ComposeMultiParam (Batch r -> Batch ()) f g) =>
@@ -241,7 +242,7 @@ instance A.FromJSON r => ClientFunction () r (Batch r) where
                                                "Client received wrong result type: " ++ msg
 
 instance (ClientFunction ps r f, A.ToJSON a) => ClientFunction (a ::: ps) r (a -> f) where
-    _toBatch name (p ::: ps) rt priorArgs a = let newArgs = H.insert p (A.toJSON a) priorArgs
+    _toBatch name (p ::: ps) rt priorArgs a = let newArgs = KM.insert p (A.toJSON a) priorArgs
                                               in _toBatch name ps rt newArgs
 
 -- | Relationship between a function ('g') taking any number of arguments and yielding a @'Batch' a@,
@@ -269,7 +270,7 @@ instance A.ToJSON IdRequest where
                                      , Just $ "method" .= idRqMethod rq
                                      , ("id" .=) <$> idRqId rq
                                      , let params = idRqParams rq
-                                       in if H.null params
+                                       in if KM.null params
                                           then Nothing
                                           else Just $ "params" .= params ]
 
