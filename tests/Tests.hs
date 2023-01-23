@@ -1,6 +1,7 @@
 {-# LANGUAGE CPP #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TypeOperators #-}
+{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
 
 module Tests (tests) where
 
@@ -13,10 +14,10 @@ import qualified Data.Aeson as A
 -- import qualified Data.Aeson.Key    as DAK
 import Data.Aeson ((.=))
 import qualified Data.ByteString.Lazy as B
-import Data.Maybe (fromJust)
+-- import Data.Maybe (fromJust)
 import Data.Ratio ((%))
-import Data.Scientific (Scientific)
-import qualified Data.Vector as V
+-- import Data.Scientific (Scientific)
+-- import qualified Data.Vector as V
 import Control.Monad.Except (runExceptT, throwError)
 import Control.Monad.State (State, runState, modify, when)
 import Test.HUnit hiding (State, Test)
@@ -204,9 +205,9 @@ subtractWithConstServer response = toFunction server subtractSig 1 2
 --                     modifyId x = x
 --           modifyIds x = x
 
-responseModifyingServer :: (A.Value -> A.Value) -> Connection RequestCount
-responseModifyingServer f rq = modifyResponse <$> myServer rq
-    where modifyResponse rsp = A.encode . f . fromJust . A.decode <$> rsp
+-- responseModifyingServer :: (A.Value -> A.Value) -> Connection RequestCount
+-- responseModifyingServer f rq = modifyResponse <$> myServer rq
+--     where modifyResponse rsp = A.encode . f . fromJust . A.decode <$> rsp
 
 constServer :: B.ByteString -> Connection RequestCount
 constServer = const . return . Just
