@@ -7,6 +7,9 @@
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE FlexibleInstances #-}
 
+{-# OPTIONS_GHC -fno-warn-orphans    #-}
+{-# OPTIONS_GHC -fmissing-signatures #-}
+
 module Properties (properties) where
 
 import Network.JsonRpc.Client
