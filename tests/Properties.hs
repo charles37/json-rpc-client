@@ -7,8 +7,8 @@
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE FlexibleInstances #-}
 
-{-# OPTIONS_GHC -fno-warn-orphans    #-}
-{-# OPTIONS_GHC -fmissing-signatures #-}
+{-# OPTIONS_GHC -fno-warn-orphans            #-}
+{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
 
 module Properties (properties) where
 
